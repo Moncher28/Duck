@@ -1,0 +1,260 @@
+using System;
+
+namespace oop4
+{
+    public interface PizzaIngredient
+    {
+        public Dough CreateDough();
+        public Sause CreateSause();
+        public Cheese CreateCheese();
+        public Veggies[] CreateVeggies();
+        public Sausage CreateSausage();
+    }
+
+    public class Dough { }
+    public class Sause { }
+    public class Cheese { }
+    public class Veggies { }
+    public class Sausage { }
+
+    public class ThinCrustDough : Dough { }
+    public class ThickCrustDough : Dough { }
+
+    public class ExelSause : Sause { }
+    public class TomatoSause : Sause { }
+
+    public class RussianCheese : Cheese { }
+
+    public class YellowVeggies : Veggies { }
+    public class GreenVeggies : Veggies { }
+
+    public class FreshSausage : Sausage { }
+    public class СheseeSausage : Sausage { }
+
+    public class PizzaIngredients : PizzaIngredient{
+        public Dough CreateDough()
+        {
+            return new ThinCrustDough();
+        }
+
+        public Sause CreateSause()
+        {
+            return new ExelSause();
+        }
+
+        public Cheese CreateCheese()
+        {
+            return new RussianCheese();
+        }
+
+        public Veggies[] CreateVeggies()
+        {
+            Veggies[] veg = new Veggies[2];
+            veg[0] = new GreenVeggies();
+            veg[1] = new YellowVeggies();
+            return veg;
+        }
+
+        public Sausage CreateSausage()
+        {
+            return new FreshSausage();
+        }
+    }
+
+    public class ChicagoPizzaIngredients : PizzaIngredient
+    {
+        public Dough CreateDough()
+        {
+            return new ThickCrustDough();
+        }
+
+        public Sause CreateSause()
+        {
+            return new TomatoSause();
+        }
+
+        public Cheese CreateCheese()
+        {
+            return new RussianCheese();
+        }
+
+        public Veggies[] CreateVeggies()
+        {
+            Veggies[] veg = new Veggies[2];
+            veg[1] = new GreenVeggies();
+            veg[0] = new YellowVeggies();
+            return veg;
+        }
+
+        public Sausage CreateSausage()
+        {
+            return new СheseeSausage();
+        }
+    }
+
+
+    public abstract class Pizza
+    {
+        public String name;
+        public Dough dough;
+        public Cheese cheese;
+        public Veggies[] veggies;
+        public Sause sause;
+        public Sausage sausage;
+
+        public abstract void Prepare();
+
+        public void Bake()
+        {
+            name += " baked";
+        }
+
+        public void Cut()
+        {
+            name += " cut";
+        }
+
+        public void Box()
+        {
+            name += " packed";
+        }
+
+        public void Deliver()
+        {
+            Console.WriteLine(name);
+        }
+    }
+
+    public class CheesePizza : Pizza
+    {
+        private PizzaIngredient _ingredient;
+
+        public CheesePizza(PizzaIngredient ingredient)
+        {
+            this._ingredient = ingredient;
+        }
+
+        override
+            public void Prepare()
+        {
+            this.name = "Cheese Pizza";
+            this.veggies = _ingredient.CreateVeggies();
+            this.sausage = _ingredient.CreateSausage();
+            this.dough = _ingredient.CreateDough();
+            this.sause = _ingredient.CreateSause();
+            this.cheese = _ingredient.CreateCheese();
+        }
+    }
+
+    public class PepperoniPizza : Pizza
+    {
+        private PizzaIngredient _ingredient;
+
+        public PepperoniPizza(PizzaIngredient ingredient)
+        {
+            this._ingredient = ingredient;
+        }
+
+        override
+            public void Prepare()
+        {
+            this.name = "Pepperoni Pizza";
+            this.veggies = _ingredient.CreateVeggies();
+            this.sausage = _ingredient.CreateSausage();
+            this.dough = _ingredient.CreateDough();
+            this.sause = _ingredient.CreateSause();
+        }
+    }
+
+    public class HlebPizza : Pizza
+    {
+        private PizzaIngredient _ingredient;
+
+        public HlebPizza(PizzaIngredient ingredient)
+        {
+            this._ingredient = ingredient;
+        }
+
+        override
+            public void Prepare()
+        {
+            this.name = "Hlebnaya Pizza";
+            this.veggies = _ingredient.CreateVeggies();
+            this.dough = _ingredient.CreateDough();
+            this.sause = _ingredient.CreateSause();
+            this.cheese = _ingredient.CreateCheese();
+        }
+    }
+
+
+    public abstract class PizzaStore
+    {
+
+        public Pizza OrderPizza(String type)
+        {
+            Pizza pizza = CreatePizza(type);
+
+            pizza.Prepare();
+            pizza.Bake();
+            pizza.Cut();
+            pizza.Box();
+
+            return pizza;
+        }
+
+        public Pizza ChoosePizza(String type, PizzaIngredient ingredient)
+        {
+            Pizza pizza = null;
+            if (type.Equals("cheese"))
+            {
+                pizza = new CheesePizza(ingredient);
+            }
+            else if (type.Equals("greek"))
+            {
+                pizza = new HlebPizza(ingredient);
+            }
+            else if (type.Equals("pepperoni"))
+            {
+                pizza = new PepperoniPizza(ingredient);
+            }
+            return pizza;
+        }
+        public abstract Pizza CreatePizza(String type);
+    }
+
+
+    public class NePizzaStore : PizzaStore
+    {
+        override
+            public Pizza CreatePizza(String type)
+        {
+            Pizza pizza = null;
+            PizzaIngredient ingredient = new PizzaIngredients();
+            pizza = ChoosePizza(type, ingredient);
+            return pizza;
+        }
+    }
+
+    public class ChicagoPizzaStore : PizzaStore
+    {
+        override
+            public Pizza CreatePizza(String type)
+        {
+            Pizza pizza = null;
+            PizzaIngredient ingredient = new ChicagoPizzaIngredients();
+            pizza = ChoosePizza(type, ingredient);
+            return pizza;
+        }
+    }
+
+
+    class Program
+    {
+        public static void Main(String[] args)
+        {
+            var chicago = new ChicagoPizzaStore();
+            var pizza = chicago.OrderPizza("greek");
+            Console.WriteLine(pizza.name);
+        }
+    }
+}
