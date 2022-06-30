@@ -1,0 +1,173 @@
+using System;
+
+
+namespace OOP3
+{
+        public interface IBeverage{
+            public float getCost();
+            public string getDescription();}
+
+
+
+        class HouseBlend : IBeverage{
+                public float getCost()
+                {
+                    return 100;
+                }
+                    public string getDescription()
+                    {
+                        return "HouseBlend ";
+                    }
+                    
+        }
+
+
+        class Late : IBeverage
+        {
+            public float getCost()
+            {
+                return 115;
+            }
+            public string getDescription()
+            {
+                return "Late ";
+            }
+        }
+
+
+        class Capuchino : IBeverage
+        {
+            public float getCost()
+            {
+                return 120;
+            }
+            public string getDescription()
+            {
+                return "Capuchino ";
+            }
+        }
+
+        class Latte : IBeverage
+        {
+            public float getCost()
+            {
+                return 100;
+            }
+            public string getDescription()
+            {
+                return "Latte ";
+            }
+        }
+
+
+        class Arabika : IBeverage
+        {
+            public float getCost()
+            {
+                return 150;
+            }
+            public string getDescription()
+            {
+                return "Arabika ";
+            }
+        }
+
+
+        class Espresso : IBeverage
+        {
+            public float getCost()
+            {
+                return 60;
+            }
+            public string getDescription()
+            {
+                return "Espresso  ";
+            }
+        }
+
+
+        class Withoutcoffi : IBeverage
+        {
+            public float getCost()
+            {
+                return 80;
+            }
+            public string getDescription()
+            {
+                return "Without Coffi";
+            }
+        }
+
+        public interface ToppingDecorator : IBeverage { }
+
+        public class MilkDecorator : ToppingDecorator
+        {
+            IBeverage thisorder;
+
+            public MilkDecorator(IBeverage thisorder)
+            {
+                this.thisorder = thisorder;
+            }
+
+            public float getCost()
+            {
+                return thisorder.getCost() + 20;
+            }
+
+            public string getDescription()
+            {
+                return thisorder.getDescription() + " Milk";
+            }
+        }
+
+        public class SoyaDecorator : ToppingDecorator
+        {
+            IBeverage thisorder;
+
+            public SoyaDecorator(IBeverage thisorder)
+            {
+                this.thisorder = thisorder;
+            }
+
+            public float getCost()
+            {
+                return thisorder.getCost() + 10;
+            }
+
+            public string getDescription()
+            {
+                return thisorder.getDescription() + " Soya";
+            }
+        }
+
+
+        public class WIPDecorator : ToppingDecorator
+        {
+            IBeverage thisorder;
+
+            public WIPDecorator(IBeverage thisorder)
+            {
+                this.thisorder = thisorder;
+            }
+
+            public float getCost()
+            {
+                return thisorder.getCost() + 40;
+            }
+
+            public string getDescription()
+            {
+                return thisorder.getDescription() + "  WIP";
+            }
+        }
+
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                IBeverage beverage = new MilkDecorator(new SoyaDecorator(new MilkDecorator(new WIPDecorator(new Late()))));
+                Console.WriteLine(beverage.getDescription());
+                Console.WriteLine(beverage.getCost());
+            }
+        }
+    }
