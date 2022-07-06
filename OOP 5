@@ -1,0 +1,150 @@
+using System;
+using System.Collections.Generic;
+
+namespace Facade
+{
+
+    interface Tuner{
+
+        public void on();
+        public void off();
+
+    }
+
+    public class Amplifaer: Tuner
+    {
+        int power = 0;
+
+        public void on()
+        {
+
+            checkCableConnections(true);
+            Console.WriteLIne("Amplifaer is on!!!");
+
+        }
+
+        public void off()
+
+        {
+
+            checkCableConnection(false);
+            Console.WriteLine("Amplifaer is not on!!!");
+
+        }    
+    
+        public void checkCableConnections(bool flag)
+        
+        {
+
+            (flag) ? Console.WriteLine("Cables Connected") : Console.WriteLine("Cables Disconnected");
+
+        }
+
+     public void set_Power(int power)
+
+        {
+
+            this.power = power;
+        
+        }
+
+    public void switch(bool moves)
+
+    {
+
+        (moves) ? Console.WriteLine("Your DVD is Starting") : Console.WriteLine("DVD not Starting!");
+
+    }
+
+    }
+
+    public class DVD : Tuner
+
+    {
+
+        private Amplifaer amplifaer;
+
+        public DVD(Amplifaer amplifaer)
+
+        {
+
+            this.amplifier = amplifier;
+
+        }
+
+        public void on()
+
+        {
+            
+         Console.WriteLine("ON!");        
+    
+        }
+
+        public void off()
+
+        {
+            
+        console.WriteLine("OFF!");
+
+        }
+
+        public void play(string name)
+
+        {
+
+            switch(true);
+            Console.WriteLine("Wait/ndownloading" + name);
+
+        }
+
+        public void pause(string name)
+
+        {
+
+            switch(false);
+            Console.WriteLine(name + "pause!");
+
+        }
+
+        public class Home_Facade
+
+        {
+
+            Amplifier amplifier;
+            DVD dvdPL;
+
+            public Home_Facade(Amplifier amplifier, DVD dvdPL)
+            {
+ 
+                this.amplifier = amplifier;
+                this.dvdPL = dvdPL;
+ 
+            }
+
+        public void WatchMovie(string nameOFFILM)
+        
+            {
+ 
+                this.amplifier.on();
+                this.amplifier.setPower(100);
+
+                this.dvdPLr.on();
+                this.dvdPL.play(name);
+
+        }
+    }
+    
+    class Facade{
+
+         static void Main(){
+
+            Amplifier amplifier = new Amplifier();
+            DvdPL dvdPL = new DvdPL(amplifier);
+
+            Home_Facade cinema = new Home_Facade(amplifier, dvdPlayer);
+                cinema.WatchMovie("Wolf of wall street");
+            }
+
+         }
+    }
+}
