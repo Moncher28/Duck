@@ -1,0 +1,340 @@
+//Generic List
+using System;
+using System.Collections.Generic;
+
+namespace Generic{
+
+    public interface List<T>
+    {
+        void add(T element);
+        
+        void put(T element, int position);
+        
+        void remove(int position);
+        
+        int find(T element);
+        
+        T? get(int index);
+ 
+        void print();
+    }
+    
+    class ArrayList<T> : List<T>
+    {
+        private T[] arr;
+        
+        public int cur;
+        
+        private int max;
+ 
+        public ArrayList(int n)
+        {
+            arr = new T[n];
+            cur = 0;
+            max = n;
+ 
+        }
+    
+    public void add(T element)
+        {
+            if (cur + 1 == max)
+            {
+                var temp_arr = new T[max * 2];
+ 
+                for (int i = 0; i < cur; i++)
+                {
+                    temp_arr[i] = arr[i];
+                }
+                arr = temp_arr;
+                max *= 2;
+            }
+            arr[cur] = element;
+            cur++;
+        }
+        
+    public int find(T element)
+        {
+            for (int i = 0; i < cur; i++)
+            
+                if (Equals(arr[i], element))
+                {
+                    return i;
+                }
+                
+            return -1;
+        }
+ 
+        public T? get(int index)
+        {
+            
+            if (index < 0 || index > cur)
+            
+            {
+                throw new IndexOutOfRangeException();
+            }
+            
+            else
+            {
+                return arr[index];
+            }
+        }
+    
+    public void print()
+    
+        {
+            for (int i = 0; i < cur; i++)
+            
+            {
+                Console.WriteLine(arr[i]);
+                Console.WriteLine('\t');
+            }
+        }
+    
+    public void put(T element, int position)
+        {
+            
+            if (position < 0 || position > cur)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            
+            else
+            {
+                if (cur + 1 == max)
+                {
+                    var temp_arr = new T[max * 2];
+ 
+                    for (int i = 0; i < cur; i++)
+                    
+                    {
+                        temp_arr[i] = arr[i];
+                    }
+                    
+                    arr = temp_arr;
+                    max *= 2;
+                }
+                
+         
+         var temp_arr1 = new T[cur + 1];
+         
+                for (int i = 0; i < position; i++)
+                
+                {
+                    temp_arr1[i] = arr[i];
+                }
+                
+                for (int i = position; i < cur; i++)
+                
+                {
+                    temp_arr1[i + 1] = arr[i];
+                }
+                
+                arr = temp_arr1;
+                
+                arr[position] = element;
+                cur++;
+            }
+        }       
+                
+        
+        
+        public void remove(int position)
+        {
+            if (position < 0 || position > cur)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+                var temp_arr = new T[cur];
+                
+                for (int i = 0; i < position; i++)
+                {
+                    temp_arr[i] = arr[i];
+                }
+                for (int i = cur; i > position; i--)
+                {
+                    temp_arr[i - 1] = arr[i];
+                }
+                arr = temp_arr;
+            }
+            cur--;
+        }
+    } 
+    
+    
+    
+        class LinkedList<T> : List<T>
+    {
+        private class Node<TA>
+        
+        {
+            public Node<TA> previous = null;
+            
+            public Node<TA> next = null;
+            
+            public TA data;
+            
+            public Node(TA data)
+            {
+                this.data = data;
+            }    
+        }
+ 
+        private Node<T> head;
+        
+        private Node<T> tail;
+        
+        private int size;
+ 
+        public LinkedList()
+        {
+            head = tail = null;
+            size = 0;
+        }
+        
+        
+        
+        public void add(T element)
+        {
+            var node = new Node<T>(element);
+ 
+            if (head == null)
+            
+            {
+                head = node;
+            }
+            
+            else
+            {
+                tail.next = node;
+                node.previous = tail;
+            }
+            
+            tail = node;
+            size++;
+        }
+ 
+        public int find(T element)
+        
+        {
+            var node = head;
+            
+            for (int i = 0; i <= size; i++)
+            {
+                if (Equals(node.data, element))
+                
+                {
+                    return i;
+                }
+                
+                node = node.next;
+            }
+            
+            return -1;
+        }
+        
+        
+    public T? get(int index)
+        {
+            if (index < 0 || index > size)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+                var node = head;
+                for (int i = 0; i <= index; i++)
+                {
+                    node = node.next;
+                }
+                return node.data;
+            }
+        }
+    
+    public void Print()
+        {
+            for (var i = head; i.next != null; i = i.next)
+            {
+                Console.WriteLine(i.data);
+            }
+        }
+        
+        
+    public void put(T element, int position)
+        {
+            var new_node = new Node<T>(element);
+            
+            if (size == 0)
+            {
+                head = new_node;
+                tail = new_node;
+            }
+            
+            else if (position == 0)
+            
+            {
+                new_node.next = head;
+                
+                head.previous = new_node;
+                
+                head = new_node;
+            }
+            
+            else if(position == size)
+            {
+                
+                tail.next = new_node;
+                
+                new_node.previous = tail;
+                
+                tail = new_node;
+            }
+            
+            else
+            {
+                var cur_node = head;
+                
+                for (int i = 0; i <= position; i++)
+                
+                {
+                    cur_node = cur_node.next;
+                }
+                
+                new_node.previous = cur_node.previous;
+                
+                cur_node.previous.next = new_node;
+                
+                new_node.next = cur_node;
+                
+                cur_node.previous = new_node;
+            }
+        }
+    
+    public void remove(int position)
+    
+        {
+            var node = head;
+            
+            for (int i = 0; i <= position; i++)
+            
+            {
+                node = node.next;
+            }
+            
+            node.next.previous = node.previous;
+            
+            node.previous.next = node.next;
+        }
+    }
+ 
+ 
+ 
+    class Program
+    {
+        static void Main(string[] args)
+        {
+ 
+        }
+    }
+}
